@@ -28,4 +28,46 @@
   `.makefun/owner.json` (agent wallet), this trial log.
 - Local preflight: `node main.ts` with `ENTRY_OUTPUT` to a temp dir,
   then read back the output file and check length = 37, one line.
-- (Bundle + check results to be appended after the first bundle/check run.)
+- Preflight result (25 Nov 2026, 12:02 WITA): exit 0, output 37 bytes,
+  exactly `Sorry, the bug works from home today.`, 1 line, non-whitespace.
+  Node on this machine: v24.22.1 (entry selects node22 per kit check).
+
+### Bundle v1 + check v1 (25 Nov 2026, 12:04 WITA)
+- Bundle: `bundle-5-v1.tar.gz`, 161,656 bytes,
+  sha256 `6d9614c1c54aa3cabb08292252124682775dc7d7f86b1fdd4d4f857c24488b51`.
+  Flags: `--session` (own session jsonl) `--no-discover --no-family
+  --harness muse-app --harness-version 1.3 --provider meta
+  --model muse-spark-1.3 --effort default --mcp none
+  --prompt-file prompt-5.txt --prompt-origin other
+  --prompt-via "parent coordinator subagent handoff for twelve-prog build #5"`.
+  Two earlier bundle attempts failed on the run record before this one
+  succeeded: (1) no `--prompt-origin` — prompt-file is not the first
+  message of a root session; (2) `--prompt-origin handed-off` with the
+  parent coordinator session — chain stopped at the coordinator session,
+  which opens with a coordinator message, not the person's prompt.
+  The `other` origin (per the skill's six-prog recipe) wrote the bundle.
+  Bundle warning: 0 usage rows attached — subagent rows flush only when
+  the run completes; coordinator re-bundles with usage rows (normal).
+  Bundle content: 1 session, 25 turns, 104 lines; 5 files packed.
+- Check v1 (kit check from inside the repo, `--transcripts bundle-5-v1.tar.gz`,
+  commit `ce740159c73f23451e2a2e6af16a2b9c65641c79`):
+  **12 passed, 2 failed, 5 skipped.**
+  - Passes include: competition_open, snapshot (5 files, 4,633 bytes),
+    license_osi (MIT), entrypoint (node22), transcripts_present/recorded,
+    thinking_wellformed (59 messages), thinking_in_window,
+    thinking_reproduces **90.3% (47 of 52 counted lines, 0 pasted;
+    main.ts 8 authored lines)**, thinking_turns (24), transcripts_run_record,
+    thinking_own_work (47/52 own writing).
+  - FAIL `thinking_priced`: 0 usage rows attached (expected for a live
+    subagent session; coordinator re-bundles with `--muse-usage`).
+  - FAIL `thinking_revised`: no file takes its final content from 2+ write/edit
+    messages — main.ts was written once in full. Fix: this genuine revision
+    of trial-log.md with the real v1 bundle/check results above, then
+    re-commit, re-bundle (v2), re-check.
+  - At-submission checks (repo_public, repo_owner, repo_created_after_open,
+    commit_in_repo, duplicate_snapshot) listed as checks at submission:
+    repo is public, `.makefun/owner.json` committed, commit pushed,
+    repo created after the 03:30:39Z opening.
+- This trial-log revision IS the thinking_revised fix: it records the real
+  v1 bundle (161,656 B, sha256 `6d9614c1…`) and the real v1 check
+  (12 passed / 2 failed / 5 skipped, reproduces 90.3%).
