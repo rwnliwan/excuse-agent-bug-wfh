@@ -71,3 +71,17 @@
 - This trial-log revision IS the thinking_revised fix: it records the real
   v1 bundle (161,656 B, sha256 `6d9614c1…`) and the real v1 check
   (12 passed / 2 failed / 5 skipped, reproduces 90.3%).
+
+### Bundle v2 + check v2 (25 Nov 2026, 12:04 WITA)
+- Commit after the trial-log revision: `59092da972e537bf2489bb361520ac1f1fd6491b`
+  (pushed; HEAD = `git ls-remote` HEAD, tree clean).
+- Bundle: `bundle-5-v2.tar.gz`, 168,700 bytes,
+  sha256 `d1e19c2fa1ebbeb76596222b9a45b00b336d17c515652f4c546ddbc8fab12910`.
+  Same flags as v1. Warning again: 0 usage rows attached (subagent rows
+  flush only when the run completes; coordinator re-bundles with usage rows).
+- Check v2: **13 passed, 1 failed, 5 skipped.**
+  - `thinking_revised` now PASSES: trial-log.md takes its final content
+    from 2 messages that write/edit it.
+  - `thinking_reproduces` 94.6% (88 of 93 counted lines, 0 pasted).
+  - Only failure left: `thinking_priced` (0 usage rows) — the known
+    subagent pattern; coordinator re-bundles with `--muse-usage`.
